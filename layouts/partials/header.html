@@ -1,0 +1,105 @@
+<header class="site-header">
+    <!-- First Header - Logo, Search, Subscribe -->
+    <div class="header-top">
+        <div class="container-full">
+            <div class="header-top-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a href="{{ .Site.BaseURL }}">
+                        {{ if .Site.Params.logo }}
+                            <img src="{{ .Site.Params.logo }}" alt="{{ .Site.Title }}">
+                        {{ else }}
+                            <div class="logo-text">
+                                <h1>Dr. Axe</h1>
+                                <p class="tagline">Co-Founder of <strong>ANCIENT NUTRITION</strong></p>
+                            </div>
+                        {{ end }}
+                    </a>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <form class="search-form" action="/search" method="get">
+                        <input type="text" name="q" placeholder="Search for Articles, Recipes, & More" class="search-input">
+                        <button type="submit" class="search-button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Subscribe Button -->
+                <div class="subscribe-btn">
+                    <a href="#newsletter" class="btn btn-subscribe">Subscribe</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Second Header - Navigation -->
+    <nav class="main-navigation">
+        <div class="container-full">
+            <div class="nav-wrapper">
+                <ul class="nav-menu">
+                    {{ range .Site.Menus.main }}
+                        <li class="nav-item">
+                            <a href="{{ .URL }}" class="nav-link {{ if $.IsMenuCurrent "main" . }}active{{ end }}">
+                                {{ .Name }}
+                                {{ if eq .Name "Health" }}
+                                    <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                {{ else if eq .Name "Nutrition" }}
+                                    <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                {{ else if eq .Name "Beauty" }}
+                                    <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                {{ else if eq .Name "Fitness" }}
+                                    <svg class="dropdown-icon" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                {{ end }}
+                            </a>
+                            {{ if eq .Name "Health" }}
+                                <!-- Health Dropdown Menu -->
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-content">
+                                        <div class="dropdown-column">
+                                            <a href="/health/allergies/">Allergies</a>
+                                            <a href="/health/brain-health/">Brain Health</a>
+                                            <a href="/health/cancer/">Cancer</a>
+                                            <a href="/health/childrens-health/">Children's Health</a>
+                                            <a href="/health/diabetes/">Diabetes</a>
+                                            <a href="/health/gut-health/">Gut Health</a>
+                                        </div>
+                                        <div class="dropdown-column">
+                                            <a href="/health/heart-health/">Heart Health</a>
+                                            <a href="/health/endocrine-system/">Endocrine System</a>
+                                            <a href="/health/mental-health/">Mental Health</a>
+                                            <a href="/health/skin-hair-health/">Skin & Hair Health</a>
+                                            <a href="/health/symptoms/">Symptoms</a>
+                                            <a href="/health/treatments/">Treatments</a>
+                                            <a href="/health/weight-loss/">Weight Loss</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{ end }}
+                        </li>
+                    {{ end }}
+                </ul>
+                
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>

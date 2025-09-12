@@ -1,0 +1,54 @@
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- About Section -->
+            <div class="footer-section">
+                <h4>UNDER DR. AXE</h4>
+                <ul>
+                    <li><a href="/about/">About Dr. Axe</a></li>
+                    <li><a href="/about-us/">About Us</a></li>
+                    <li><a href="/media-inquiries/">Media Inquiries</a></li>
+                </ul>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h4>FOLLOW US</h4>
+                <div class="footer-social">
+                    {{ if .Site.Params.social.facebook }}
+                        <a href="{{ .Site.Params.social.facebook }}" target="_blank" rel="noopener" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                    {{ end }}
+                    {{ if .Site.Params.social.twitter }}
+                        <a href="{{ .Site.Params.social.twitter }}" target="_blank" rel="noopener" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                    {{ end }}
+                </div>
+            </div>
+            
+            <!-- Legal -->
+            <div class="footer-section">
+                <h4>LEGAL</h4>
+                <ul>
+                    <li><a href="/privacy-policy/">Privacy Policy</a></li>
+                    <li><a href="/terms-of-use/">Terms of Use</a></li>
+                    <li><a href="/affiliate-disclosure/">Affiliate Disclosure</a></li>
+                    <li><a href="/dmca-policy/">DMCA Policy</a></li>
+                    <li><a href="/careers/">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <p>© {{ now.Year }} Dr. Axe. All Rights Reserved.</p>
+            <p>This content is for informational and educational purposes only. It is not intended to provide medical advice or to take the place of such advice or treatment from a personal physician. All readers/viewers of this content are advised to consult their doctors or qualified health professionals regarding specific health questions. Neither Dr. Axe nor the publisher of this content takes responsibility for possible health consequences of any person or persons reading or following the information in this educational content. All viewers of this content, especially those taking prescription or over-the-counter medications, should consult their physicians before beginning any nutrition, supplement or lifestyle program.</p>
+        </div>
+    </div>
+</footer>

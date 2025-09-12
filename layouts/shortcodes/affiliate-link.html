@@ -1,0 +1,24 @@
+{{ $url := .Get 0 }}
+{{ $text := .Get 1 }}
+{{ $affiliate_id := .Get 2 }}
+{{ $class := .Get "class" | default "affiliate-link" }}
+
+{{ $final_url := $url }}
+{{ if $affiliate_id }}
+  {{ $final_url = printf "%s?ref=%s" $url $affiliate_id }}
+{{ end }}
+
+<a href="{{ $final_url }}" 
+   target="_blank" 
+   rel="nofollow noopener sponsored" 
+   class="{{ $class }}"
+   data-affiliate="true">
+   {{ $text }}
+</a>
+
+{{ if not (.Page.Scratch.Get "affiliate-disclaimer") }}
+  {{ .Page.Scratch.Set "affiliate-disclaimer" true }}
+  <div class="affiliate-disclaimer" style="font-size: 0.85rem; color: #666; margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-left: 4px solid #2db5a5; border-radius: 4px;">
+    <strong>Affiliate Disclosure:</strong> This post contains affiliate links. We may earn a commission if you purchase through these links at no additional cost to you. This helps support our content creation.
+  </div>
+{{ end }}

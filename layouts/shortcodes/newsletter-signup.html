@@ -1,0 +1,31 @@
+{{ $title := .Get "title" | default "Stay Updated" }}
+{{ $description := .Get "description" | default "Get the latest health and nutrition tips delivered to your inbox." }}
+{{ $button_text := .Get "button" | default "Subscribe Now" }}
+{{ $style := .Get "style" | default "default" }}
+
+<div class="newsletter-shortcode newsletter-{{ $style }}" style="margin: 2rem 0; padding: 2rem; background: linear-gradient(135deg, #2db5a5, #238a7e); border-radius: 8px; color: white; text-align: center;">
+  <h3 style="margin-bottom: 1rem; color: white;">{{ $title }}</h3>
+  <p style="margin-bottom: 1.5rem; opacity: 0.9;">{{ $description }}</p>
+  
+  <form class="newsletter-form inline-newsletter" action="#" method="post" style="max-width: 400px; margin: 0 auto;">
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+      <input 
+        type="email" 
+        name="email" 
+        placeholder="Your email address" 
+        required 
+        style="flex: 1; padding: 12px; border: none; border-radius: 4px; font-size: 1rem;">
+      <button 
+        type="submit" 
+        style="padding: 12px 24px; background: white; color: #2db5a5; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+        {{ $button_text }}
+      </button>
+    </div>
+    <div style="font-size: 0.85rem; opacity: 0.8;">
+      <label style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <input type="checkbox" name="consent" required style="margin: 0;">
+        I agree to receive health and nutrition emails
+      </label>
+    </div>
+  </form>
+</div>

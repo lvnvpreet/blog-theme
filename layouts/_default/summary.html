@@ -1,0 +1,10 @@
+<article class="summary">
+    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+    <p class="meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+    </p>
+    <div class="excerpt">
+        {{ .Summary }}
+    </div>
+    <a href="{{ .Permalink }}" class="read-more">Read More</a>
+</article>

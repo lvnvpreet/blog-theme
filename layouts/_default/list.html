@@ -1,0 +1,66 @@
+{{ define "main" }}
+<div class="container">
+    <div class="list-layout">
+        <!-- Main Content -->
+        <div class="main-content-area">
+            <!-- Page Header -->
+            <header class="page-header">
+                <h1 class="page-title">{{ .Title }}</h1>
+                {{ if .Description }}
+                    <p class="page-description">{{ .Description }}</p>
+                {{ else if .Content }}
+                    <div class="page-content">{{ .Content }}</div>
+                {{ end }}
+                
+                {{ if .IsSection }}
+                    <p class="page-meta">
+                        In order to help combat or prevent an existing condition or simply improve general health, our articles cover the latest research, new treatments (both conventional and natural) as well as various trends. Additionally, we wanted to feature recipes and ingredients we love. Each piece is based on studies and always fact-checked.
+                    </p>
+                {{ end }}
+            </header>
+            
+            <!-- Posts List -->
+            <section class="posts-list">
+                {{ range .Paginator.Pages }}
+                    <article class="post-item">
+                        {{ if .Params.image }}
+                            <div class="post-image">
+                                <a href="{{ .Permalink }}">
+                                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                </a>
+                            </div>
+                        {{ end }}
+                        
+                        <div class="post-content">
+                            <div class="post-meta">
+                                {{ with .Section }}
+                                    <span class="category">{{ . | upper }}</span>
+                                {{ end }}
+                                <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+                            </div>
+                            
+                            <h2 class="post-title">
+                                <a href="{{ .Permalink }}">{{ .Title }}</a>
+                            </h2>
+                            
+                            <p class="post-excerpt">{{ .Summary | truncate 200 }}...</p>
+                            
+                            <a href="{{ .Permalink }}" class="read-more">READ MORE</a>
+                        </div>
+                    </article>
+                {{ end }}
+            </section>
+            
+            <!-- Pagination -->
+            {{ if gt .Paginator.TotalPages 1 }}
+                {{ partial "pagination.html" . }}
+            {{ end }}
+        </div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            {{ partial "sidebar.html" . }}
+        </aside>
+    </div>
+</div>
+{{ end }}

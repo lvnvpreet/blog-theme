@@ -1,0 +1,18 @@
+name = "HealthBlog"
+license = "MIT"
+licenselink = "https://github.com/yourusername/healthblog-hugo-theme/blob/main/LICENSE"
+description = "A modern, responsive Hugo theme designed for health, wellness, and nutrition blogs. Features double header layout, clean URLs, and comprehensive functionality."
+homepage = "https://github.com/yourusername/healthblog-hugo-theme"
+tags = ["blog", "health", "nutrition", "wellness", "responsive", "clean", "modern", "medical"]
+features = ["responsive", "clean-urls", "seo-optimized", "double-header", "sidebar", "social-sharing", "newsletter", "mobile-friendly"]
+min_version = "0.80.0"
+
+[author]
+  name = "Your Name"
+  homepage = "https://yourwebsite.com"
+
+# If you have a running demo site, add it here
+# [original]
+#   author = "Dr. Axe"
+#   homepage = "https://draxe.com"
+#   repo = "Inspired by Dr. Axe's website design"

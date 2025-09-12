@@ -1,0 +1,184 @@
+{{ $paginator := .Paginator }}
+{{ if gt $paginator.TotalPages 1 }}
+<nav class="pagination" role="navigation" aria-label="Pagination Navigation">
+    <ul class="pagination-list">
+        <!-- Previous Page -->
+        {{ if $paginator.HasPrev }}
+            <li class="pagination-item">
+                <a href="{{ $paginator.Prev.URL }}" class="pagination-link prev" aria-label="Go to previous page">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    Previous
+                </a>
+            </li>
+        {{ else }}
+            <li class="pagination-item">
+                <span class="pagination-link prev disabled">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                    </svg>
+                    Previous
+                </span>
+            </li>
+        {{ end }}
+        
+        <!-- Page Numbers -->
+        {{ $currentPage := $paginator.PageNumber }}
+        {{ $totalPages := $paginator.TotalPages }}
+        
+        <!-- Always show first page -->
+        {{ if ne $currentPage 1 }}
+            <li class="pagination-item">
+                <a href="{{ $paginator.First.URL }}" class="pagination-link">1</a>
+            </li>
+        {{ end }}
+        
+        <!-- Show dots if there's a gap -->
+        {{ if gt $currentPage 3 }}
+            <li class="pagination-item">
+                <span class="pagination-dots">…</span>
+            </li>
+        {{ end }}
+        
+        <!-- Show pages around current page -->
+        {{ range $paginator.Pagers }}
+            {{ $pageNum := .PageNumber }}
+            {{ if or (eq $pageNum $currentPage) (and (ge $pageNum (sub $currentPage 1)) (le $pageNum (add $currentPage 1))) }}
+                <li class="pagination-item">
+                    {{ if eq $pageNum $currentPage }}
+                        <span class="pagination-link current" aria-current="page">{{ $pageNum }}</span>
+                    {{ else }}
+                        <a href="{{ .URL }}" class="pagination-link">{{ $pageNum }}</a>
+                    {{ end }}
+                </li>
+            {{ end }}
+        {{ end }}
+        
+        <!-- Show dots if there's a gap -->
+        {{ if lt $currentPage (sub $totalPages 2) }}
+            <li class="pagination-item">
+                <span class="pagination-dots">…</span>
+            </li>
+        {{ end }}
+        
+        <!-- Always show last page -->
+        {{ if ne $currentPage $totalPages }}
+            <li class="pagination-item">
+                <a href="{{ $paginator.Last.URL }}" class="pagination-link">{{ $totalPages }}</a>
+            </li>
+        {{ end }}
+        
+        <!-- Next Page -->
+        {{ if $paginator.HasNext }}
+            <li class="pagination-item">
+                <a href="{{ $paginator.Next.URL }}" class="pagination-link next" aria-label="Go to next page">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </a>
+            </li>
+        {{ else }}
+            <li class="pagination-item">
+                <span class="pagination-link next disabled">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </span>
+            </li>
+        {{ end }}
+    </ul>
+    
+    <!-- Page Info -->
+    <div class="pagination-info">
+        <span>Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+    </div>
+</nav>
+
+<style>
+.pagination {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+    align-items: center;
+}
+
+.pagination-item {
+    display: flex;
+}
+
+.pagination-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 44px;
+    justify-content: center;
+}
+
+.pagination-link:hover:not(.disabled):not(.current) {
+    background-color: #2db5a5;
+    color: white;
+    border-color: #2db5a5;
+}
+
+.pagination-link.current {
+    background-color: #2db5a5;
+    color: white;
+    border-color: #2db5a5;
+}
+
+.pagination-link.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination-dots {
+    padding: 10px 8px;
+    color: #666;
+    font-weight: 500;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .pagination-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .pagination-link.prev,
+    .pagination-link.next {
+        padding: 8px 10px;
+    }
+    
+    .pagination-link.prev span,
+    .pagination-link.next span {
+        display: none;
+    }
+}
+</style>
+{{ end }}

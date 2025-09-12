@@ -1,0 +1,92 @@
+{{ define "main" }}
+<div class="container">
+    <div class="homepage-layout">
+        <!-- Main Content -->
+        <div class="main-content-area">
+            <!-- Featured Article -->
+            {{ $featured := (where .Site.RegularPages "Params.featured" true) | first 1 }}
+            {{ range $featured }}
+                <article class="featured-article">
+                    {{ if .Params.image }}
+                        <div class="featured-image">
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                        </div>
+                    {{ end }}
+                    <div class="featured-content">
+                        <div class="article-meta">
+                            {{ with .Section }}
+                                <span class="category">{{ . | upper }}</span>
+                            {{ end }}
+                        </div>
+                        <h1 class="featured-title">
+                            <a href="{{ .Permalink }}">{{ .Title }}</a>
+                        </h1>
+                        <div class="article-date">
+                            {{ .Date.Format "January 2, 2006" }} — {{ .Summary | truncate 150 }}...
+                        </div>
+                        <a href="{{ .Permalink }}" class="read-more">Read more »</a>
+                    </div>
+                </article>
+            {{ end }}
+            
+            <!-- Recent Posts Grid -->
+            <section class="recent-posts">
+                <h2 class="section-title">Latest Stories</h2>
+                <div class="posts-grid">
+                    {{ $posts := (where .Site.RegularPages "Type" "!=" "page") }}
+                    {{ range first 10 $posts }}
+                        <article class="post-card">
+                            {{ if .Params.image }}
+                                <div class="post-image">
+                                    <a href="{{ .Permalink }}">
+                                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                    </a>
+                                </div>
+                            {{ end }}
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    {{ with .Section }}
+                                        <span class="category">{{ . | upper }}</span>
+                                    {{ end }}
+                                    <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                                </h3>
+                                <p class="post-excerpt">{{ .Summary | truncate 120 }}...</p>
+                                <a href="{{ .Permalink }}" class="read-more">Read more »</a>
+                            </div>
+                        </article>
+                    {{ end }}
+                </div>
+            </section>
+            
+            <!-- Newsletter Section -->
+            {{ if .Site.Params.newsletter.enabled }}
+                <section class="newsletter-section" id="newsletter">
+                    <div class="newsletter-content">
+                        <h3>Newsletter Sign-Up</h3>
+                        <p>{{ .Site.Params.newsletter.title }}</p>
+                        <form class="newsletter-form" action="#" method="post">
+                            <div class="form-group">
+                                <input type="email" name="email" placeholder="Your email address" required>
+                                <button type="submit" class="btn btn-primary">SUBMIT</button>
+                            </div>
+                            <div class="form-options">
+                                <label>
+                                    <input type="checkbox" name="newsletter" checked> Email Newsletter
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            {{ end }}
+        </div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            {{ partial "sidebar.html" . }}
+        </aside>
+    </div>
+</div>
+{{ end }}

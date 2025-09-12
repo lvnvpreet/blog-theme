@@ -1,0 +1,27 @@
+baseURL: "https://example.com"
+languageCode: "en-us"
+title: "HealthBlog"
+theme: "mytheme"
+
+params:
+  description: "A modern health and wellness blog"
+  author: "Your Name"
+
+menu:
+  main:
+    - name: "Home"
+      url: "/"
+      weight: 1
+    - name: "About"
+      url: "/about/"
+      weight: 2
+    - name: "Contact"
+      url: "/contact/"
+      weight: 3
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+paginate: 10
