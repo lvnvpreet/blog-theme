@@ -1,4 +1,7 @@
 {{ define "main" }}
+<!-- Breadcrumb Navigation -->
+{{ partial "breadcrumb.html" . }}
+
 <div class="container">
     <div class="list-layout">
         <!-- Main Content -->
@@ -11,49 +14,127 @@
                 {{ else if .Content }}
                     <div class="page-content">{{ .Content }}</div>
                 {{ end }}
-                
-                {{ if .IsSection }}
-                    <p class="page-meta">
-                        In order to help combat or prevent an existing condition or simply improve general health, our articles cover the latest research, new treatments (both conventional and natural) as well as various trends. Additionally, we wanted to feature recipes and ingredients we love. Each piece is based on studies and always fact-checked.
-                    </p>
-                {{ end }}
             </header>
             
-            <!-- Posts List -->
-            <section class="posts-list">
-                {{ range .Paginator.Pages }}
-                    <article class="post-item">
-                        {{ if .Params.image }}
-                            <div class="post-image">
-                                <a href="{{ .Permalink }}">
-                                    <img src="{{ .Params.image }}" alt="{{ .Title }}">
-                                </a>
+            <!-- Check if this is a main category with subcategories -->
+            {{ $subsections := .Sections }}
+            {{ if $subsections }}
+                <!-- Main Category Page - Show Subcategories -->
+                <section class="subcategories-grid">
+                    <h2 class="section-title">{{ .Title }} Topics</h2>
+                    <div class="subcategories-list">
+                        {{ range $subsections }}
+                            <div class="subcategory-card">
+                                {{ $firstPost := (where .RegularPages "Type" "!=" "page") | first 1 }}
+                                {{ range $firstPost }}
+                                    {{ if .Params.image }}
+                                        <div class="subcategory-image">
+                                            <a href="{{ .Parent.RelPermalink }}">
+                                                <img src="{{ .Params.image }}" alt="{{ .Parent.Title }}">
+                                            </a>
+                                        </div>
+                                    {{ end }}
+                                {{ end }}
+                                
+                                <div class="subcategory-content">
+                                    <h3 class="subcategory-title">
+                                        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                                    </h3>
+                                    {{ if .Description }}
+                                        <p class="subcategory-description">{{ .Description }}</p>
+                                    {{ else if .Content }}
+                                        <p class="subcategory-description">{{ .Content | truncate 150 }}</p>
+                                    {{ end }}
+                                    
+                                    <div class="subcategory-meta">
+                                        {{ $postCount := len .RegularPages }}
+                                        <span class="post-count">{{ $postCount }} {{ cond (eq $postCount 1) "Article" "Articles" }}</span>
+                                        <a href="{{ .RelPermalink }}" class="view-all-link">View All →</a>
+                                    </div>
+                                </div>
                             </div>
                         {{ end }}
-                        
-                        <div class="post-content">
-                            <div class="post-meta">
-                                {{ with .Section }}
-                                    <span class="category">{{ . | upper }}</span>
-                                {{ end }}
-                                <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
-                            </div>
-                            
-                            <h2 class="post-title">
-                                <a href="{{ .Permalink }}">{{ .Title }}</a>
-                            </h2>
-                            
-                            <p class="post-excerpt">{{ .Summary | truncate 200 }}...</p>
-                            
-                            <a href="{{ .Permalink }}" class="read-more">READ MORE</a>
+                    </div>
+                </section>
+                
+                <!-- Recent Posts from All Subcategories -->
+                {{ $allPosts := .RegularPagesRecursive }}
+                {{ if $allPosts }}
+                    <section class="recent-posts-section">
+                        <h2 class="section-title">Latest {{ .Title }} Articles</h2>
+                        <div class="recent-posts-grid">
+                            {{ range first 6 $allPosts }}
+                                <article class="recent-post-card">
+                                    {{ if .Params.image }}
+                                        <div class="recent-post-image">
+                                            <a href="{{ .RelPermalink }}">
+                                                <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                            </a>
+                                        </div>
+                                    {{ end }}
+                                    <div class="recent-post-content">
+                                        <div class="post-meta">
+                                            {{ with .Parent.Title }}
+                                                <span class="subcategory-tag">{{ . }}</span>
+                                            {{ end }}
+                                            <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                                        </div>
+                                        <h4 class="recent-post-title">
+                                            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                                        </h4>
+                                        <p class="recent-post-excerpt">{{ .Summary | truncate 100 }}...</p>
+                                    </div>
+                                </article>
+                            {{ end }}
                         </div>
-                    </article>
+                    </section>
                 {{ end }}
-            </section>
-            
-            <!-- Pagination -->
-            {{ if gt .Paginator.TotalPages 1 }}
-                {{ partial "pagination.html" . }}
+            {{ else }}
+                <!-- Subcategory Page - Show Posts List -->
+                <section class="posts-list">
+                    {{ range .Paginator.Pages }}
+                        <article class="post-item">
+                            {{ if .Params.image }}
+                                <div class="post-image">
+                                    <a href="{{ .Permalink }}">
+                                        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                                    </a>
+                                </div>
+                            {{ end }}
+                            
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    {{ with .Section }}
+                                        <span class="category">{{ . | upper }}</span>
+                                    {{ end }}
+                                    {{ with .Parent.Title }}
+                                        <span class="subcategory">{{ . }}</span>
+                                    {{ end }}
+                                    <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
+                                </div>
+                                
+                                <h2 class="post-title">
+                                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                                </h2>
+                                
+                                <p class="post-excerpt">{{ .Summary | truncate 200 }}...</p>
+                                
+                                {{ if .Params.author }}
+                                    <div class="post-author">
+                                        <span>By {{ .Params.author }}</span>
+                                    </div>
+                                {{ end }}
+                                
+                                <a href="{{ .Permalink }}" class="read-more">READ MORE</a>
+                            </div>
+                        </article>
+                    {{ end }}
+                </section>
+                
+                <!-- Pagination -->
+                {{ if gt .Paginator.TotalPages 1 }}
+                    {{ partial "pagination.html" . }}
+                {{ end }}
             {{ end }}
         </div>
         
@@ -63,4 +144,221 @@
         </aside>
     </div>
 </div>
+
+<style>
+/* Subcategories Grid Styles */
+.subcategories-grid {
+    margin-bottom: 50px;
+}
+
+.subcategories-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.subcategory-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.subcategory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.subcategory-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.subcategory-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.subcategory-card:hover .subcategory-image img {
+    transform: scale(1.05);
+}
+
+.subcategory-content {
+    padding: 25px;
+}
+
+.subcategory-title {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.subcategory-title a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.subcategory-title a:hover {
+    color: #2db5a5;
+}
+
+.subcategory-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.subcategory-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.post-count {
+    color: #888;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.view-all-link {
+    color: #2db5a5;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.view-all-link:hover {
+    color: #238a7e;
+}
+
+/* Recent Posts Grid */
+.recent-posts-section {
+    margin-top: 50px;
+}
+
+.recent-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.recent-post-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.recent-post-card:hover {
+    transform: translateY(-3px);
+}
+
+.recent-post-image {
+    height: 150px;
+    overflow: hidden;
+}
+
+.recent-post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recent-post-content {
+    padding: 20px;
+}
+
+.recent-post-content .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+}
+
+.subcategory-tag {
+    background: #2db5a5;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+.recent-post-content .date {
+    color: #666;
+}
+
+.recent-post-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.recent-post-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.recent-post-title a:hover {
+    color: #2db5a5;
+}
+
+.recent-post-excerpt {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Enhanced Post Item Styles for Subcategory Pages */
+.post-item .post-meta .subcategory {
+    background: rgba(45, 181, 165, 0.1);
+    color: #2db5a5;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.post-author {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .subcategories-list {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .recent-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .subcategory-content {
+        padding: 20px;
+    }
+    
+    .subcategory-title {
+        font-size: 1.2rem;
+    }
+}
+</style>
 {{ end }}

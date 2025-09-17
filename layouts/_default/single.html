@@ -1,4 +1,7 @@
 {{ define "main" }}
+<!-- Breadcrumb Navigation -->
+{{ partial "breadcrumb.html" . }}
+
 <div class="container">
     <div class="single-post-layout">
         <!-- Main Content -->
@@ -6,10 +9,11 @@
             <!-- Post Header -->
             <header class="post-header">
                 <div class="post-meta">
-                    {{ if .Params.categories }}
-                        {{ range first 1 .Params.categories }}
-                            <span class="category">{{ . | upper }}</span>
-                        {{ end }}
+                    {{ with .Section }}
+                        <span class="category">{{ . | upper }}</span>
+                    {{ end }}
+                    {{ with .Parent.Title }}
+                        <span class="subcategory">{{ . }}</span>
                     {{ end }}
                     <span class="date">{{ .Date.Format "January 2, 2006" }}</span>
                     <span class="read-time">{{ .ReadingTime }} min read</span>
@@ -94,7 +98,10 @@
             <section class="related-posts">
                 <h3>Related Articles</h3>
                 <div class="related-posts-grid">
-                    {{ $related := where .Site.RegularPages ".Section" .Section | first 3 }}
+                    {{ $related := where .Parent.RegularPages ".Permalink" "!=" .Permalink | first 3 }}
+                    {{ if not $related }}
+                        {{ $related = where .Site.RegularPages ".Section" .Section | where ".Permalink" "!=" .Permalink | first 3 }}
+                    {{ end }}
                     {{ range $related }}
                         <article class="related-post">
                             {{ if .Params.image }}
@@ -104,8 +111,8 @@
                             {{ end }}
                             <div class="related-content">
                                 <div class="post-meta">
-                                    {{ with .Section }}
-                                        <span class="category">{{ . | upper }}</span>
+                                    {{ with .Parent.Title }}
+                                        <span class="subcategory">{{ . }}</span>
                                     {{ end }}
                                 </div>
                                 <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>

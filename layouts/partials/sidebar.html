@@ -1,19 +1,233 @@
-<aside class="sidebar">
-    <div class="widget">
-        <h3>Recent Posts</h3>
-        <ul>
-            {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
-            <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-            {{ end }}
-        </ul>
+<!-- Recent Posts Widget -->
+<div class="widget recent-posts-widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="recent-posts-list">
+        {{ range first 4 (where .Site.RegularPages "Type" "!=" "page") }}
+            <article class="recent-post-item">
+                {{ if .Params.image }}
+                    <div class="recent-post-image">
+                        <a href="{{ .Permalink }}">
+                            <img src="{{ .Params.image }}" alt="{{ .Title }}">
+                        </a>
+                    </div>
+                {{ end }}
+                <div class="recent-post-content">
+                    <div class="post-meta">
+                        {{ with .Section }}
+                            <span class="category">{{ . | upper }}</span>
+                        {{ end }}
+                        {{ with .Parent.Title }}
+                            <span class="subcategory">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    <h4 class="recent-post-title">
+                        <a href="{{ .Permalink }}">{{ .Title }}</a>
+                    </h4>
+                    <span class="recent-post-date">{{ .Date.Format "January 2, 2006" }} — {{ .Summary | truncate 80 }}...</span>
+                    <a href="{{ .Permalink }}" class="read-more">Read more »</a>
+                </div>
+            </article>
+        {{ end }}
     </div>
-    
-    <div class="widget">
-        <h3>Categories</h3>
-        <ul>
-            {{ range .Site.Taxonomies.categories }}
-            <li><a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a> ({{ .Count }})</li>
-            {{ end }}
-        </ul>
+</div>
+
+<!-- Categories Widget with Subcategories -->
+<div class="widget categories-widget">
+    <h3 class="widget-title">Health Topics</h3>
+    <div class="categories-tree">
+        <!-- Health Category -->
+        <div class="category-section">
+            <h4 class="category-main"><a href="/health/">Health</a></h4>
+            <ul class="subcategories-list">
+                <li><a href="/health/womens-health/">Women's Health</a></li>
+                <li><a href="/health/mens-health/">Men's Health</a></li>
+                <li><a href="/health/brain-health/">Brain Health</a></li>
+                <li><a href="/health/heart-health/">Heart Health</a></li>
+                <li><a href="/health/digestive-health/">Digestive Health</a></li>
+            </ul>
+        </div>
+        
+        <!-- Nutrition Category -->
+        <div class="category-section">
+            <h4 class="category-main"><a href="/nutrition/">Nutrition</a></h4>
+            <ul class="subcategories-list">
+                <li><a href="/nutrition/vitamins-minerals/">Vitamins & Minerals</a></li>
+                <li><a href="/nutrition/superfoods/">Superfoods</a></li>
+                <li><a href="/nutrition/meal-planning/">Meal Planning</a></li>
+                <li><a href="/nutrition/dietary-approaches/">Dietary Approaches</a></li>
+            </ul>
+        </div>
+        
+        <!-- Recipes Category -->
+        <div class="category-section">
+            <h4 class="category-main"><a href="/recipes/">Recipes</a></h4>
+            <ul class="subcategories-list">
+                <li><a href="/recipes/breakfast/">Breakfast</a></li>
+                <li><a href="/recipes/lunch/">Lunch</a></li>
+                <li><a href="/recipes/dinner/">Dinner</a></li>
+                <li><a href="/recipes/snacks/">Snacks</a></li>
+            </ul>
+        </div>
+        
+        <!-- Beauty Category -->
+        <div class="category-section">
+            <h4 class="category-main"><a href="/beauty/">Beauty</a></h4>
+            <ul class="subcategories-list">
+                <li><a href="/beauty/skincare/">Skincare</a></li>
+                <li><a href="/beauty/haircare/">Haircare</a></li>
+                <li><a href="/beauty/diy-beauty/">DIY Beauty</a></li>
+            </ul>
+        </div>
+        
+        <!-- Fitness Category -->
+        <div class="category-section">
+            <h4 class="category-main"><a href="/fitness/">Fitness</a></h4>
+            <ul class="subcategories-list">
+                <li><a href="/fitness/strength-training/">Strength Training</a></li>
+                <li><a href="/fitness/cardio/">Cardio</a></li>
+                <li><a href="/fitness/yoga/">Yoga</a></li>
+            </ul>
+        </div>
     </div>
-</aside>
+</div>
+
+<style>
+.categories-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.category-section {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.category-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.category-main {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.category-main a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.category-main a:hover {
+    color: #2db5a5;
+}
+
+.subcategories-list {
+    list-style: none;
+    padding-left: 15px;
+    margin: 0;
+}
+
+.subcategories-list li {
+    margin-bottom: 6px;
+}
+
+.subcategories-list a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.subcategories-list a:hover {
+    color: #2db5a5;
+}
+
+.subcategories-list a:before {
+    content: '→';
+    color: #2db5a5;
+    margin-right: 8px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.recent-post-content .subcategory {
+    background-color: rgba(45, 181, 165, 0.15);
+    color: #2db5a5;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    margin-left: 8px;
+}
+</style>
+
+<!-- Newsletter Widget -->
+{{ if .Site.Params.newsletter.enabled }}
+    <div class="widget newsletter-widget">
+        <h3 class="widget-title">NEWSLETTER SIGN-UP</h3>
+        <p>Get the latest health and nutrition news from Dr. Axe delivered straight to your inbox</p>
+        <form class="newsletter-form" action="#" method="post">
+            <input type="email" name="email" placeholder="First Name" required>
+            <input type="text" name="name" placeholder="Email Address" required>
+            <div class="form-options">
+                <label>
+                    <input type="checkbox" name="newsletter" checked> I have read and agree to the terms & conditions.
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">SUBMIT</button>
+        </form>
+    </div>
+{{ end }}
+
+<!-- Follow Us Widget -->
+<div class="widget social-widget">
+    <h3 class="widget-title">FOLLOW US</h3>
+    <div class="social-links">
+        {{ if .Site.Params.social.facebook }}
+            <a href="{{ .Site.Params.social.facebook }}" target="_blank" rel="noopener" class="social-link facebook">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Facebook
+            </a>
+        {{ end }}
+        
+        {{ if .Site.Params.social.twitter }}
+            <a href="{{ .Site.Params.social.twitter }}" target="_blank" rel="noopener" class="social-link twitter">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                </svg>
+                Twitter
+            </a>
+        {{ end }}
+        
+        {{ if .Site.Params.social.instagram }}
+            <a href="{{ .Site.Params.social.instagram }}" target="_blank" rel="noopener" class="social-link instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                Instagram
+            </a>
+        {{ end }}
+    </div>
+</div>
+
+<!-- Popular Posts Widget -->
+<div class="widget popular-posts-widget">
+    <h3 class="widget-title">Most Popular</h3>
+    <div class="popular-posts-list">
+        {{ range first 5 (where .Site.RegularPages "Params.popular" true) }}
+            <article class="popular-post-item">
+                <span class="post-number">{{ add .Position 1 }}</span>
+                <div class="popular-post-content">
+                    <h4><a href="{{ .Permalink }}">{{ .Title }}</a></h4>
+                    <span class="post-date">{{ .Date.Format "January 2, 2006" }}</span>
+                </div>
+            </article>
+        {{ end }}
+    </div>
+</div>

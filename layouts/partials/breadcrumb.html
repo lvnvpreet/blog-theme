@@ -1,0 +1,136 @@
+<!-- layouts/partials/breadcrumb.html -->
+<nav class="breadcrumb-nav" aria-label="Breadcrumb">
+    <div class="container">
+        <ol class="breadcrumb">
+            <!-- Home Link -->
+            <li class="breadcrumb-item">
+                <a href="{{ .Site.BaseURL }}" class="breadcrumb-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9L12 2L21 9V20A2 2 0 0 1 19 20H5A2 2 0 0 1 3 20V9Z"></path>
+                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                    </svg>
+                    {{ .Site.Title }}
+                </a>
+            </li>
+
+            <!-- Build breadcrumb based on section hierarchy -->
+            {{ $sections := split (trim .RelPermalink "/") "/" }}
+            {{ $currentPath := "" }}
+            
+            {{ range $index, $section := $sections }}
+                {{ $currentPath = printf "%s/%s" $currentPath $section }}
+                {{ $sectionPage := $.Site.GetPage $currentPath }}
+                
+                {{ if $sectionPage }}
+                    {{ if eq $index (sub (len $sections) 1) }}
+                        <!-- Current page (not linked) -->
+                        <li class="breadcrumb-item current" aria-current="page">
+                            {{ if $.IsPage }}
+                                {{ $.Title }}
+                            {{ else }}
+                                {{ $sectionPage.Title }}
+                            {{ end }}
+                        </li>
+                    {{ else }}
+                        <!-- Intermediate section (linked) -->
+                        <li class="breadcrumb-item">
+                            <a href="{{ $sectionPage.RelPermalink }}" class="breadcrumb-link">
+                                {{ $sectionPage.Title }}
+                            </a>
+                        </li>
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+
+            <!-- If this is a single page, add its title -->
+            {{ if and .IsPage (not (eq .Kind "section")) }}
+                <li class="breadcrumb-item current" aria-current="page">
+                    {{ .Title }}
+                </li>
+            {{ end }}
+        </ol>
+    </div>
+</nav>
+
+<style>
+.breadcrumb-nav {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 8px;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: '>';
+    margin-left: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.breadcrumb-link {
+    color: #2db5a5;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.breadcrumb-link:hover {
+    color: #238a7e;
+    background-color: rgba(45, 181, 165, 0.1);
+}
+
+.breadcrumb-link svg {
+    width: 14px;
+    height: 14px;
+}
+
+.breadcrumb-item.current {
+    color: #495057;
+    font-weight: 500;
+    padding: 4px 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .breadcrumb-nav {
+        padding: 8px 0;
+        font-size: 0.85rem;
+    }
+    
+    .breadcrumb {
+        gap: 6px;
+    }
+    
+    .breadcrumb-item:not(:last-child)::after {
+        margin-left: 8px;
+    }
+    
+    .breadcrumb-link {
+        padding: 2px 6px;
+    }
+    
+    .breadcrumb-link svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+</style>
